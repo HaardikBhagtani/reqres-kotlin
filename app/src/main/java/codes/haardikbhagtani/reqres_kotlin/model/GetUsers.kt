@@ -1,14 +1,17 @@
 package codes.haardikbhagtani.reqres_kotlin.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class GetUsers(
+
     @SerializedName("page"        ) var page       : Int?            = null,
     @SerializedName("per_page"    ) var perPage    : Int?            = null,
     @SerializedName("total"       ) var total      : Int?            = null,
     @SerializedName("total_pages" ) var totalPages : Int?            = null,
     @SerializedName("data"        ) var data       : ArrayList<Data> = arrayListOf(),
     @SerializedName("support"     ) var support    : Support?        = Support()
+
 )
 
 data class Data (
@@ -19,7 +22,7 @@ data class Data (
     @SerializedName("last_name"  ) var lastName  : String? = null,
     @SerializedName("avatar"     ) var avatar    : String? = null
 
-)
+) : Serializable
 
 data class Support (
 

@@ -1,5 +1,6 @@
 package codes.haardikbhagtani.reqres_kotlin
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -9,11 +10,16 @@ import codes.haardikbhagtani.reqres_kotlin.adapter.UsersAdapter
 import codes.haardikbhagtani.reqres_kotlin.databinding.ActivityGetReqresUsersBinding
 import codes.haardikbhagtani.reqres_kotlin.helper.ReqresApi
 import codes.haardikbhagtani.reqres_kotlin.helper.RetrofitHelper
+import codes.haardikbhagtani.reqres_kotlin.model.Data
 import codes.haardikbhagtani.reqres_kotlin.model.GetUsers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
-class GetReqresUsersActivity : AppCompatActivity() {
+interface CellClickListener {
+    fun onCellClickListener(data: Data)
+}
+
+class GetReqresUsersActivity : AppCompatActivity(), CellClickListener {
     private lateinit var binding: ActivityGetReqresUsersBinding
     private lateinit var users: GetUsers
     private lateinit var adapter: UsersAdapter
@@ -30,11 +36,18 @@ class GetReqresUsersActivity : AppCompatActivity() {
             users = result.body()!!
             Log.d("Main", users.data[0].firstName.toString())
 
-            adapter = UsersAdapter(this@GetReqresUsersActivity, users)
+            adapter = UsersAdapter(this@GetReqresUsersActivity, users, this@GetReqresUsersActivity)
 
             binding.rvUsers.layoutManager = LinearLayoutManager(this@GetReqresUsersActivity, LinearLayoutManager.VERTICAL, false)
 
             binding.rvUsers.adapter = adapter
         }
+    }
+
+    override fun onCellClickListener(data: Data) {
+        val intent = Intent(this, ReqresUserDetailsActivity::class.java).apply {
+            putExtra("data", data)
+        }
+       startActivity(intent)
     }
 }
